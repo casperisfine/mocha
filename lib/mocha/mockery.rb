@@ -37,7 +37,7 @@ module Mocha
         @instances.last || Null.new
       end
 
-      def setup
+      def setup(_test)
         @instances ||= []
         mockery = new
         mockery.logger = instance.logger unless @instances.empty?
@@ -48,8 +48,8 @@ module Mocha
         instance.verify(*args)
       end
 
-      def teardown
-        instance.teardown
+      def teardown(test)
+        instance.teardown(test)
       ensure
         @instances.pop
       end
@@ -91,9 +91,10 @@ module Mocha
       end
     end
 
-    def teardown
+    def teardown(test)
       stubba.unstub_all
-      mocks.each(&:__expire__)
+      test_name = "#{test.class.name}##{test.name}"
+      mocks.each { |m| m.__expire__(test_name) }
       reset
     end
 

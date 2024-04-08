@@ -11,6 +11,10 @@ module TestRunner
   def run_as_tests(methods = {})
     base_class = Mocha::TestCase
     test_class = Class.new(base_class) do
+      def self.name
+        "FakeTest"
+      end
+
       include Assertions
 
       methods.each do |(method_name, proc)|

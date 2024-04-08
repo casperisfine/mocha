@@ -6,12 +6,12 @@ require 'mocha/names'
 
 class ClassMethodsTest < Mocha::TestCase
   def setup
-    Mocha::Mockery.setup
+    Mocha::Mockery.setup(self)
     @klass = Class.new.extend(Mocha::ClassMethods, Mocha::ObjectMethods)
   end
 
   def teardown
-    Mocha::Mockery.teardown
+    Mocha::Mockery.teardown(self)
   end
 
   def test_should_build_any_instance_object

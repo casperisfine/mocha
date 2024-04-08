@@ -7,15 +7,15 @@ class MockeryTest < Mocha::TestCase
   include Mocha
 
   def setup
-    Mockery.setup
+    Mockery.setup(self)
   end
 
   def teardown
-    Mockery.teardown
+    Mockery.teardown(self)
   end
 
   def test_should_return_null_mockery_if_not_setup
-    Mockery.teardown
+    Mockery.teardown(self)
     mockery = Mockery.instance
     assert_not_nil mockery
     assert_kind_of Mockery::Null, mockery
@@ -35,7 +35,7 @@ class MockeryTest < Mocha::TestCase
 
   def test_should_expire_mockery_instance_cache
     mockery1 = Mockery.instance
-    Mockery.teardown
+    Mockery.teardown(self)
     mockery2 = Mockery.instance
     assert_not_same mockery1, mockery2
   end
@@ -55,7 +55,7 @@ class MockeryTest < Mocha::TestCase
     mockery = Mockery.new
     mock = mockery.unnamed_mock
     mock.expects(:my_method)
-    mockery.teardown
+    mockery.teardown(self)
     assert_nothing_raised(ExpectationErrorFactory.exception_class) { mockery.verify }
   end
 
@@ -68,7 +68,7 @@ class MockeryTest < Mocha::TestCase
   def test_should_build_new_instance_of_stubba_on_teardown
     mockery = Mockery.new
     stubba1 = mockery.stubba
-    mockery.teardown
+    mockery.teardown(self)
     stubba2 = mockery.stubba
     assert_not_same stubba1, stubba2
   end
@@ -83,7 +83,7 @@ class MockeryTest < Mocha::TestCase
   def test_should_reset_list_of_state_machines_on_teardown
     mockery = Mockery.new
     mockery.new_state_machine('state-machine-name')
-    mockery.teardown
+    mockery.teardown(self)
     assert_equal 0, mockery.state_machines.length
   end
 
@@ -101,7 +101,7 @@ class MockeryTest < Mocha::TestCase
     mockery = Mockery.new
     stubba = mockery.stubba
     stubba.stub(FakeMethod.new)
-    mockery.teardown
+    mockery.teardown(self)
     assert stubba.stubba_methods.empty?
   end
 

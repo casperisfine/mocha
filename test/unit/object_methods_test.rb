@@ -7,12 +7,12 @@ require 'mocha/names'
 
 class ObjectMethodsTest < Mocha::TestCase
   def setup
-    Mocha::Mockery.setup
+    Mocha::Mockery.setup(self)
     @object = Object.new.extend(Mocha::ObjectMethods)
   end
 
   def teardown
-    Mocha::Mockery.teardown
+    Mocha::Mockery.teardown(self)
   end
 
   def test_should_build_mocha_referring_to_self
